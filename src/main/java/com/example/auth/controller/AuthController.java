@@ -1,6 +1,7 @@
 package com.example.auth.controller;
 
 import com.example.auth.model.AuthenticationRequest;
+import com.example.auth.model.AuthenticationResponse;
 import com.example.auth.model.UserModel;
 import com.example.auth.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +16,17 @@ public class AuthController {
   public AuthController(UserService userService){ this.userService = userService;}
 
   @PostMapping("/subs")
-  public ResponseEntity<?> subscribeClient(@RequestBody AuthenticationRequest authenticationRequest){
+  public ResponseEntity<AuthenticationResponse> subscribeClient(@RequestBody AuthenticationRequest authenticationRequest){
     return userService.subscribe(authenticationRequest);
   }
 
   @PostMapping("/auth")
-  public ResponseEntity<?> authenticateClient(@RequestBody AuthenticationRequest authenticationRequest){
+  public ResponseEntity<AuthenticationResponse> authenticateClient(@RequestBody AuthenticationRequest authenticationRequest){
     return userService.authenticate(authenticationRequest);
   }
 
+  // TODO il faut remplacer UserModel par un DTO.
+  // il n'est pas conseillé d'envoyer l'entité dans ton controleur.
   @PutMapping
   public UserModel update(@RequestBody UserModel userModel) {return userService.update(userModel) ;}
 }
