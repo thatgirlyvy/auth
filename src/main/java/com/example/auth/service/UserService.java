@@ -1,9 +1,7 @@
 package com.example.auth.service;
 
-import com.example.auth.model.AuthenticationRequest;
-import com.example.auth.model.AuthenticationResponse;
-import com.example.auth.model.UserModel;
-import com.example.auth.repository.UserRepository;
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -13,21 +11,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import com.example.auth.configuration.security.JWTSingleton;
+import com.example.auth.model.AuthenticationRequest;
+import com.example.auth.model.AuthenticationResponse;
+import com.example.auth.model.UserModel;
+import com.example.auth.repository.UserRepository;
+
 @Service
 public class UserService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
   private final UserRepository userRepository;
-  private final JwtUtils jwtUtils;
   private final UserAuthentication userAuthentication;
 
   private final AuthenticationManager authenticationManager;
 
-  public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserAuthentication userAuthentication) {
+  public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, UserAuthentication userAuthentication) {
     this.userRepository = userRepository;
     this.authenticationManager = authenticationManager;
-    this.jwtUtils = jwtUtils;
     this.userAuthentication = userAuthentication;
   }
 
@@ -68,9 +70,12 @@ public class UserService {
 
     UserDetails loadedUser = userAuthentication.loadUserByUsername(username);
 
-    String generatedToken = jwtUtils.generatedToken(loadedUser);
+    String generatedToken = JWTSingleton.getInstance(loadedUser.getUsername(), new HashMap<>()).getToken();
 
-    return ResponseEntity.ok(new AuthenticationResponse(generatedToken));
+    return ResponseEntity.ok()
+      .header("Authorization", generatedToken)
+      .header("Allow-control-headers", "Authorization")
+      .body(new AuthenticationResponse());
   }
 
   public UserModel update(UserModel userModel){
