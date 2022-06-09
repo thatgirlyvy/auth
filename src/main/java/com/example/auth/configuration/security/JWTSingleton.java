@@ -6,16 +6,11 @@ import java.util.Map;
 
 import javax.crypto.SecretKey;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 public class JWTSingleton {   
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JWTSingleton.class);
 
     private static JWTSingleton instance;
 

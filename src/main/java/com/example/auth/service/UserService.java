@@ -74,7 +74,7 @@ public class UserService {
 
     return ResponseEntity.ok()
       .header("Authorization", generatedToken)
-      .header("Allow-control-headers", "Authorization")
+      .header("Access-Control-Expose-Headers", "Authorization")
       .body(new AuthenticationResponse());
   }
 

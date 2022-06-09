@@ -1,7 +1,6 @@
 package com.example.auth.configuration.security;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;

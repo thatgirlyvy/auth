@@ -16,7 +16,7 @@ public class AuthController {
   public AuthController(UserService userService){ this.userService = userService;}
 
   @GetMapping("/dashboard")
-  private String testingToken(){
+  public String testingToken(){
     return "welcome to dashboard";
   }
 
