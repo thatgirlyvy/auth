@@ -9,11 +9,17 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("users")
+@CrossOrigin(origins = "http://localhost:8100")
 public class AuthController {
 
   private final UserService userService;
 
   public AuthController(UserService userService){ this.userService = userService;}
+
+  @GetMapping("/dashboard")
+  private String testingToken(){
+    return "welcome to dashboard";
+  }
 
   @PostMapping("/subs")
   public ResponseEntity<AuthenticationResponse> subscribeClient(@RequestBody AuthenticationRequest authenticationRequest){
@@ -29,4 +35,7 @@ public class AuthController {
   // il n'est pas conseillé d'envoyer l'entité dans ton controleur.
   @PutMapping
   public UserModel update(@RequestBody UserModel userModel) {return userService.update(userModel) ;}
+
+  @GetMapping("{username}")
+  public UserModel getByUsername(@PathVariable String username) { return userService.getByUsername(username);}
 }

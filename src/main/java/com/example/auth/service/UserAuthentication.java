@@ -2,42 +2,39 @@ package com.example.auth.service;
 
 import java.util.ArrayList;
 
-import com.example.auth.model.UserModel;
-import com.example.auth.repository.UserRepository;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+
+import com.example.auth.model.UserModel;
+import com.example.auth.repository.UserRepository;
 
 @Service
 public class UserAuthentication implements UserDetailsService {
+  private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthentication.class);
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthentication.class);
-    
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    public UserAuthentication(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+  public UserAuthentication(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserModel foundedUser = userRepository.findByUsername(username);
-        
-        if (foundedUser == null)
-            return null;
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    UserModel foundedUser = userRepository.findByUsername(username);
 
-        LOGGER.info("Success");
+    if (foundedUser == null)
+      return null;
 
-        String name = foundedUser.getUsername();
-        String pwd = foundedUser.getPassword();
+    LOGGER.info("Success");
 
-        return new User(name, BCrypt.hashpw(pwd, BCrypt.gensalt()), new ArrayList<>());
-    }
+    String name = foundedUser.getUsername();
+    String pwd = foundedUser.getPassword();
 
+    return new User(name, pwd, new ArrayList<>());
+  }
 }

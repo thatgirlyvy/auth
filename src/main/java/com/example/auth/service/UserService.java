@@ -4,27 +4,32 @@ import com.example.auth.model.AuthenticationRequest;
 import com.example.auth.model.AuthenticationResponse;
 import com.example.auth.model.UserModel;
 import com.example.auth.repository.UserRepository;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
-  
+
   private final UserRepository userRepository;
+  private final JwtUtils jwtUtils;
+  private final UserAuthentication userAuthentication;
 
   private final AuthenticationManager authenticationManager;
-  
-  public UserService(UserRepository userRepository, AuthenticationManager authenticationManager) {
+
+  public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserAuthentication userAuthentication) {
     this.userRepository = userRepository;
     this.authenticationManager = authenticationManager;
-  }  
+    this.jwtUtils = jwtUtils;
+    this.userAuthentication = userAuthentication;
+  }
 
   public ResponseEntity<AuthenticationResponse> subscribe(AuthenticationRequest authenticationRequest) {
     String username = authenticationRequest.getUsername();
@@ -34,7 +39,7 @@ public class UserService {
 
     UserModel userModel = new UserModel();
     userModel.setUsername(username);
-    userModel.setPassword(password);
+    userModel.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
     userModel.setEmail(email);
     userModel.setFullName(fullName);
     userModel.setRole("customer");
@@ -61,7 +66,11 @@ public class UserService {
       return ResponseEntity.ok(new AuthenticationResponse("error during client authentication for: " + username));
     }
 
-    return ResponseEntity.ok(new AuthenticationResponse("successful authentication for client: " + username));
+    UserDetails loadedUser = userAuthentication.loadUserByUsername(username);
+
+    String generatedToken = jwtUtils.generatedToken(loadedUser);
+
+    return ResponseEntity.ok(new AuthenticationResponse(generatedToken));
   }
 
   public UserModel update(UserModel userModel){
@@ -81,4 +90,6 @@ public class UserService {
     }
     return userModel;
   }
+
+  public UserModel getByUsername(String username) { return userRepository.findByUsername(username);}
 }
