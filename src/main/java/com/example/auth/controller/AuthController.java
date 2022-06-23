@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("users")
-@CrossOrigin(origins = "http://localhost:8100")
 public class AuthController {
 
   private final UserService userService;
@@ -17,7 +16,7 @@ public class AuthController {
   public AuthController(UserService userService){ this.userService = userService;}
 
   @GetMapping("/dashboard")
-  private String testingToken(){
+  public String testingToken() {
     return "welcome to dashboard";
   }
 

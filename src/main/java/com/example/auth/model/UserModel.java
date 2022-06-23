@@ -9,6 +9,16 @@ public class UserModel {
   @Id
   private String id;
 
+  public Offer getOffer() {
+    return offer;
+  }
+
+  public void setOffer(Offer offer) {
+    this.offer = offer;
+  }
+
+  private Offer offer;
+
   public UserModel() {
 
   }

@@ -1,5 +1,6 @@
 package com.example.auth.service;
 
+import com.example.auth.configuration.Security.JWTSingleton;
 import com.example.auth.model.AuthenticationRequest;
 import com.example.auth.model.AuthenticationResponse;
 import com.example.auth.model.UserModel;
@@ -13,21 +14,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 @Service
 public class UserService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
   private final UserRepository userRepository;
-  private final JwtUtils jwtUtils;
   private final UserAuthentication userAuthentication;
 
   private final AuthenticationManager authenticationManager;
 
-  public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserAuthentication userAuthentication) {
+  public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, UserAuthentication userAuthentication) {
     this.userRepository = userRepository;
     this.authenticationManager = authenticationManager;
-    this.jwtUtils = jwtUtils;
     this.userAuthentication = userAuthentication;
   }
 
@@ -68,9 +69,12 @@ public class UserService {
 
     UserDetails loadedUser = userAuthentication.loadUserByUsername(username);
 
-    String generatedToken = jwtUtils.generatedToken(loadedUser);
+    String generatedToken = JWTSingleton.getInstance(loadedUser.getUsername(), new HashMap<>()).getToken();
 
-    return ResponseEntity.ok(new AuthenticationResponse(generatedToken));
+    return ResponseEntity.ok()
+      .header("Authorization", generatedToken)
+      .header("Access-Control-Expose-Headers", "Authorization")
+      .body(new AuthenticationResponse());
   }
 
   public UserModel update(UserModel userModel){
@@ -86,10 +90,12 @@ public class UserService {
       user1.setUsername(userModel.getUsername());
       user1.setEmail(userModel.getEmail());
       user1.setPassword(userModel.getPassword());
+      // user1.setOffer(userModel.getOffer());
       userRepository.save(user1);
     }
     return userModel;
   }
 
   public UserModel getByUsername(String username) { return userRepository.findByUsername(username);}
+
 }
