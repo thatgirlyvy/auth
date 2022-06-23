@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class SupplierService {
 
   private final UserRepository userRepository;
-  private final SupplierRepository supplierRepository;
+  private final SupplierRepository supplierRepository; // tu ne l'utilise pas ?
 
   public SupplierService(UserRepository userRepository, SupplierRepository supplierRepository){
     this.supplierRepository = supplierRepository;
@@ -21,6 +21,7 @@ public class SupplierService {
   }
 
   public UserPaginatedDTO find(int page, int size, String field, UserFilterDTO dto){
+
     // Dans le cas où nous souhaitons avoir toutes les données dans la BD.
     if (dto.getUsername() == null && dto.getFullName() == null && dto.getOffer() == null && dto.getEmail() == null ){
       Page<UserModel> pageFilter = userRepository.findAll(PageRequest.of(page, size, Sort.by(field)));
@@ -43,30 +44,16 @@ public class SupplierService {
     return new UserPaginatedDTO(pageFind.getContent(), pageFind.getTotalElements()) ;
   }
 
-  public UserModel allocateOffer(String username, Offer offer) {
-
-//    Offer gold = Offer.valueOf("PACK_GOLD");
-//    Offer silver = Offer.valueOf("PACK_SILVER");
-//    Offer bronze = Offer.valueOf("PACK_BRONZE");
-//    Offer blue = Offer.valueOf("PACK_BLUE");
-//    Offer orange = Offer.valueOf("PACK_ORANGE");
+  // l'offre doit être en string afin de la sérialiser sans problème au niveau du controleur
+  public UserModel allocateOffer(String username, String offer) {
 
     UserModel userModel = userRepository.findByUsername(username);
 
-    userModel.setOffer(offer);
+    Offer offerValue = Offer.valueOf(offer);
 
-//    if (offer == "PACK_GOLD")
-//      userModel.setOffer(gold);
-//    if ( offer == "PACK_SILVER")
-//      userModel.setOffer(silver);
-//    if ( offer == "PACK_BRONZE")
-//      userModel.setOffer(bronze);
-//    if ( offer == "PACK_BLUE")
-//      userModel.setOffer(blue);
-//    if ( offer == "PACK_ORANGE")
-//      userModel.setOffer(orange);
+    userModel.setOffer(offerValue);
 
-    System.out.println(userModel);
+    userRepository.save(userModel); // ne pas oublier de sauvergarder
 
     return userModel;
   }

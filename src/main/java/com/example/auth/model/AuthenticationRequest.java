@@ -53,6 +53,6 @@ public class AuthenticationRequest {
   private String email;
 
   public AuthenticationRequest() {
-
+    // may remain empty
   }
 }

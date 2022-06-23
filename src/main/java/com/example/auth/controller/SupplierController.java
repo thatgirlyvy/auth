@@ -31,8 +31,8 @@ public class SupplierController {
     return ResponseEntity.ok(users);
   }
 
-  @PutMapping
-  public UserModel allocate(@RequestBody String username, Offer offer){
+  @PostMapping("{username}/allocate")
+  public UserModel allocate(@PathVariable String username, @RequestParam String offer){
     return supplierService.allocateOffer(username, offer);
   }
 }
