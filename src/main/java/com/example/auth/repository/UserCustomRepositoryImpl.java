@@ -21,7 +21,6 @@ public class UserCustomRepositoryImpl implements UserCustomRepository{
   @Override
   public List<UserModel> findUserByProperties(String username, String fullName, Offer offer, String email, Pageable pageable) {
     final Query query = new Query().with(pageable);
-//     query.fields().include("id").include("name");
     final List<Criteria> criteria = new ArrayList<>();
     if (username != null && !username.isEmpty())
       criteria.add(Criteria.where("username").is(username));

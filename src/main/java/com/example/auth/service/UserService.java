@@ -1,6 +1,6 @@
 package com.example.auth.service;
 
-import com.example.auth.configuration.Security.JWTSingleton;
+import com.example.auth.configuration.security.JWTSingleton;
 import com.example.auth.model.AuthenticationRequest;
 import com.example.auth.model.AuthenticationResponse;
 import com.example.auth.model.UserModel;
@@ -90,7 +90,6 @@ public class UserService {
       user1.setUsername(userModel.getUsername());
       user1.setEmail(userModel.getEmail());
       user1.setPassword(userModel.getPassword());
-      // user1.setOffer(userModel.getOffer());
       userRepository.save(user1);
     }
     return userModel;

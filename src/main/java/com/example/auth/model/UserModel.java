@@ -20,7 +20,7 @@ public class UserModel {
   private Offer offer;
 
   public UserModel() {
-
+    // may remain empty
   }
 
   public String getUsername() {

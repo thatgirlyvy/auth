@@ -1,4 +1,4 @@
-package com.example.auth.configuration.Security;
+package com.example.auth.configuration.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
