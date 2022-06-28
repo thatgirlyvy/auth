@@ -1,6 +1,6 @@
 package com.example.auth.model.dto;
 
-import com.example.auth.model.UserModel;
+import com.example.auth.model.users.UserModel;
 
 import java.util.List;
 

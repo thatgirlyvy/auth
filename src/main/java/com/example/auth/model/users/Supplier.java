@@ -1,4 +1,4 @@
-package com.example.auth.model;
+package com.example.auth.model.users;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -56,5 +56,25 @@ public class Supplier {
   String lastName;
 
   String email;
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  String password;
+
+  public String getRole() {
+    return role;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
+  }
+
+  String role;
 
 }

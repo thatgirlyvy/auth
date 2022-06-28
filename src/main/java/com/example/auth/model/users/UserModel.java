@@ -1,5 +1,6 @@
-package com.example.auth.model;
+package com.example.auth.model.users;
 
+import com.example.auth.model.transactions.Offer;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

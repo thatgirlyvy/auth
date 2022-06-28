@@ -1,6 +1,6 @@
 package com.example.auth.configuration;
 
-import com.example.auth.configuration.Security.JwtFilterRequest;
+import com.example.auth.configuration.security.JwtFilterRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,7 +20,7 @@ public class SecurityConfiguration {
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf().disable();
-      return http.cors().and().csrf().disable().authorizeRequests().antMatchers("/users/subs", "/users/auth", "/supplier").permitAll()
+      return http.cors().and().csrf().disable().authorizeRequests().antMatchers("/users/subs", "/users/auth", "/supplier/auth","/supplier/create").permitAll()
       .anyRequest().authenticated()
       .and()
       .addFilter(new JwtFilterRequest(getAuthenticationManager()))

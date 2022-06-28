@@ -1,6 +1,6 @@
 package com.example.auth.model.dto;
 
-import com.example.auth.model.Offer;
+import com.example.auth.model.transactions.Offer;
 
 public class UserFilterDTO {
 

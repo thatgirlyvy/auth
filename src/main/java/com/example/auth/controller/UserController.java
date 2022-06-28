@@ -1,19 +1,19 @@
 package com.example.auth.controller;
 
-import com.example.auth.model.AuthenticationRequest;
-import com.example.auth.model.AuthenticationResponse;
-import com.example.auth.model.UserModel;
+import com.example.auth.model.authentication.AuthenticationRequest;
+import com.example.auth.model.authentication.AuthenticationResponse;
+import com.example.auth.model.users.UserModel;
 import com.example.auth.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("users")
-public class AuthController {
+public class UserController {
 
   private final UserService userService;
 
-  public AuthController(UserService userService){ this.userService = userService;}
+  public UserController(UserService userService){ this.userService = userService;}
 
   @GetMapping("/dashboard")
   public String testingToken() {

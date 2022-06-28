@@ -1,9 +1,9 @@
 package com.example.auth.service;
 
-import com.example.auth.configuration.Security.JWTSingleton;
-import com.example.auth.model.AuthenticationRequest;
-import com.example.auth.model.AuthenticationResponse;
-import com.example.auth.model.UserModel;
+import com.example.auth.configuration.security.JWTSingleton;
+import com.example.auth.model.authentication.AuthenticationRequest;
+import com.example.auth.model.authentication.AuthenticationResponse;
+import com.example.auth.model.users.UserModel;
 import com.example.auth.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +90,6 @@ public class UserService {
       user1.setUsername(userModel.getUsername());
       user1.setEmail(userModel.getEmail());
       user1.setPassword(userModel.getPassword());
-      // user1.setOffer(userModel.getOffer());
       userRepository.save(user1);
     }
     return userModel;

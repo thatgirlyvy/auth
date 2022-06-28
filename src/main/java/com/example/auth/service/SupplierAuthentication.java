@@ -1,7 +1,7 @@
 package com.example.auth.service;
 
-import com.example.auth.model.users.UserModel;
-import com.example.auth.repository.UserRepository;
+import com.example.auth.model.users.Supplier;
+import com.example.auth.repository.SupplierRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.User;
@@ -13,18 +13,18 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class UserAuthentication implements UserDetailsService {
+public class SupplierAuthentication implements UserDetailsService {
   private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthentication.class);
 
-  private final UserRepository userRepository;
+  private final SupplierRepository supplierRepository;
 
-  public UserAuthentication(UserRepository userRepository) {
-    this.userRepository = userRepository;
+  public SupplierAuthentication(SupplierRepository supplierRepository) {
+    this.supplierRepository = supplierRepository;
   }
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    UserModel foundedUser = userRepository.findByUsername(username);
+    Supplier foundedUser = supplierRepository.findByUsername(username);
 
     if (foundedUser == null)
       return null;

@@ -1,7 +1,7 @@
 package com.example.auth.repository;
 
-import com.example.auth.model.Offer;
-import com.example.auth.model.UserModel;
+import com.example.auth.model.transactions.Offer;
+import com.example.auth.model.users.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -21,7 +21,6 @@ public class UserCustomRepositoryImpl implements UserCustomRepository{
   @Override
   public List<UserModel> findUserByProperties(String username, String fullName, Offer offer, String email, Pageable pageable) {
     final Query query = new Query().with(pageable);
-//     query.fields().include("id").include("name");
     final List<Criteria> criteria = new ArrayList<>();
     if (username != null && !username.isEmpty())
       criteria.add(Criteria.where("username").is(username));
