@@ -1,9 +1,11 @@
 package com.example.auth.configuration;
 
-import com.example.auth.configuration.security.JwtFilterRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,13 +16,25 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.example.auth.configuration.security.JwtFilterRequest;
+import com.example.auth.service.SupplierAuthentication;
+import com.example.auth.service.UserAuthentication;
+
 @Configuration
 public class SecurityConfiguration {
 
+  @Autowired
+  UserAuthentication userAuthentication;
+  @Autowired
+  SupplierAuthentication supplierAuthentication;
+
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf().disable();
-      return http.cors().and().csrf().disable().authorizeRequests().antMatchers("/users/subs", "/users/auth", "/supplier/auth","/supplier/create").permitAll()
+      return http.cors()
+      .and()
+      .csrf().disable()
+      .authorizeRequests()
+      .antMatchers("/users/subs", "/users/auth", "/supplier/auth","/supplier/create").permitAll()
       .anyRequest().authenticated()
       .and()
       .addFilter(new JwtFilterRequest(getAuthenticationManager()))
@@ -29,8 +43,17 @@ public class SecurityConfiguration {
   }
 
   @Bean
-  AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
+  AuthenticationManager authenticationManager() {
+
+    DaoAuthenticationProvider userProvider = new DaoAuthenticationProvider();
+    userProvider.setUserDetailsService(userAuthentication);
+    userProvider.setPasswordEncoder(passwordEncoder());
+
+    DaoAuthenticationProvider supplierProvider = new DaoAuthenticationProvider();
+    supplierProvider.setUserDetailsService(supplierAuthentication);
+    supplierProvider.setPasswordEncoder(passwordEncoder());
+
+    return new ProviderManager(userProvider, supplierProvider);
   }
 
   @Bean
@@ -48,7 +71,7 @@ public class SecurityConfiguration {
     return source;
   }
 
-  private AuthenticationManager getAuthenticationManager() throws Exception {
-    return authenticationManager(new AuthenticationConfiguration());
+  private AuthenticationManager getAuthenticationManager() {
+    return authenticationManager();
   }
 }

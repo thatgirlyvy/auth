@@ -14,7 +14,8 @@ import java.util.ArrayList;
 
 @Service
 public class SupplierAuthentication implements UserDetailsService {
-  private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthentication.class);
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(SupplierAuthentication.class);
 
   private final SupplierRepository supplierRepository;
 
@@ -27,7 +28,7 @@ public class SupplierAuthentication implements UserDetailsService {
     Supplier foundedUser = supplierRepository.findByUsername(username);
 
     if (foundedUser == null)
-      return null;
+      throw new UsernameNotFoundException("Username not found");
 
     LOGGER.info("Success");
 
