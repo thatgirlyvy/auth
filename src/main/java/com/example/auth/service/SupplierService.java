@@ -121,6 +121,33 @@ public class SupplierService {
     return userModel;
   }
 
+  public UserModel updateUser(UserModel userModel){
+    UserModel user1 = userRepository.findByUsername(userModel.getUsername());
+
+    LOGGER.info("{}", userModel);
+
+    if(user1 == null) {
+      LOGGER.error("User not found");
+      return userRepository.save(userModel);
+    } else {
+      user1.setFullName(userModel.getFullName());
+      user1.setUsername(userModel.getUsername());
+      user1.setEmail(userModel.getEmail());
+      user1.setOffer(userModel.getOffer());
+      userRepository.save(user1);
+    }
+    return userModel;
+  }
+
+  public boolean deleteUser(String id) {
+    UserModel user1 = userRepository.getById(id);
+    if(user1 != null) {
+      userRepository.deleteById(id);
+      return true;
+    }
+    return false;
+  }
+
   public Supplier getByUsername(String username){ return supplierRepository.findByUsername(username);}
 
 }

@@ -6,10 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsChecker;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,10 +30,10 @@ public class SecurityConfiguration {
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
       return http.cors()
-      .and()
-      .csrf().disable()
-      .authorizeRequests()
-      .antMatchers("/users/subs", "/users/auth", "/supplier/auth","/supplier/create").permitAll()
+        .and()
+        .csrf().disable()
+        .authorizeRequests()
+        .antMatchers("/users/subs", "/users/auth", "/supplier/auth","/supplier/create").permitAll()
       .anyRequest().authenticated()
       .and()
       .addFilter(new JwtFilterRequest(getAuthenticationManager()))
@@ -45,7 +43,6 @@ public class SecurityConfiguration {
 
   @Bean
   AuthenticationManager authenticationManager() {
-
     DaoAuthenticationProvider userProvider = new DaoAuthenticationProvider();
     userProvider.setUserDetailsService(userAuthentication);
     userProvider.setPasswordEncoder(passwordEncoder());

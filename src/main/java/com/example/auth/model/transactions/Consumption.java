@@ -1,34 +1,27 @@
 package com.example.auth.model.transactions;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import java.time.LocalDateTime;
 
-import java.time.LocalDate;
-
-@Document(collection = "consumption")
 public class Consumption {
 
-  @Id
-  String id;
-
-  public Integer getQuantity() {
+  public Double getQuantity() {
     return quantity;
   }
 
-  public void setQuantity(Integer quantity) {
+  public void setQuantity(Double quantity) {
     this.quantity = quantity;
   }
 
-  public LocalDate getDate() {
+  public LocalDateTime getDate() {
     return date;
   }
 
-  public void setDate(LocalDate date) {
+  public void setDate(LocalDateTime date) {
     this.date = date;
   }
 
-  Integer quantity;
+  Double quantity;
 
-  LocalDate date;
+  LocalDateTime date;
 
 }
