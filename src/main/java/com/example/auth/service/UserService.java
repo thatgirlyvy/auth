@@ -89,7 +89,8 @@ public class UserService {
       user1.setFullName(userModel.getFullName());
       user1.setUsername(userModel.getUsername());
       user1.setEmail(userModel.getEmail());
-      user1.setPassword(userModel.getPassword());
+      user1.setPassword(BCrypt.hashpw(userModel.getPassword(), BCrypt.gensalt()));
+      user1.setQuantity(userModel.getQuantity());
       userRepository.save(user1);
     }
     return userModel;

@@ -31,7 +31,7 @@ public class SupplierController {
     return supplierService.authenticate(authenticationRequest);
   }
 
-  @GetMapping("/{username}")
+  @GetMapping("{username}")
   public Supplier getByUsername(@PathVariable String username) { return supplierService.getByUsername(username);}
 
   @GetMapping
@@ -40,7 +40,11 @@ public class SupplierController {
                                                @RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "5") Integer size,
                                                @RequestParam(defaultValue = "id") String field){
 
-    Offer off = Offer.valueOf(offer);
+    Offer off = null;
+
+    if (off != null)
+      off = Offer.valueOf(offer);
+
     UserFilterDTO dto = new UserFilterDTO(username, fullName, off, email);
 
     UserPaginatedDTO users = supplierService.find(page, size, field, dto);
@@ -51,5 +55,13 @@ public class SupplierController {
   @PostMapping("{username}/allocate")
   public UserModel allocate(@PathVariable String username, @RequestParam String offer){
     return supplierService.allocateOffer(username, offer);
+  }
+
+  @PutMapping
+  public UserModel update(@RequestBody UserModel userModel) {return supplierService.updateUser(userModel) ;}
+
+  @DeleteMapping("{id}")
+  public boolean deleteById(@PathVariable String id) {
+    return supplierService.deleteUser(id);
   }
 }

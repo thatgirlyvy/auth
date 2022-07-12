@@ -27,7 +27,7 @@ public class UserAuthentication implements UserDetailsService {
     UserModel foundedUser = userRepository.findByUsername(username);
 
     if (foundedUser == null)
-      return null;
+      throw new UsernameNotFoundException("Username not found");
 
     LOGGER.info("Success");
 
